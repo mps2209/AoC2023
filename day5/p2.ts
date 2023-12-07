@@ -9,48 +9,46 @@ fs.readFile(filePath, 'utf8', (err, data) => {
         console.error(`Error reading file: ${err}`);
         return;
     }
-    let seeds= [...data.matchAll(/seeds: ([ \d+]+)/g)][0][1].split(" ").map(seed=>parseInt(seed))
-    let lines=data.split("\n")
-    let maps=new Map();
+    let seedsMap= [...data.matchAll(/seeds: ([ \d+]+)/g)][0][1].split(" ").map(seed=>parseInt(seed))
+    let lowestDestination=Infinity
+    let maps=setupMaps(data.split("\n"))
+    seedsMap.map((value,index,array)=>{
+        if(index%2==0){
+            for (let i = value; i < value+array[index+1]; i++) {
+                let nextValue=i;
+                maps.forEach((mappings,key)=>{
+                    let foundMatch=false
+                    mappings.forEach((mapping) => {    
+                        if(!foundMatch){                    
+                            if(nextValue>=mapping[1]&&nextValue<mapping[1]+mapping[2]){
+                                //console.log("matched "+ key +  " value "+ nextValue + " to " + (mapping[0] + nextValue - mapping[1]))
+                                nextValue= mapping[0] + nextValue - mapping[1]
+                                foundMatch=true
+                            }
+                        }
+                    })
+                })
+                if(nextValue<lowestDestination){
+                    lowestDestination=nextValue;
+                }
+            }   
+        }
+    })
+    console.log(lowestDestination)
+})
+function setupMaps(lines){
+    let maps=new Map()
     let currentMap=""
     lines.splice(1,lines.length-1).filter(line=>line!="").forEach(line => {
         if(line.includes("map")){
-            maps.set(line,[])
-            currentMap=line
+            let mapName=line.replace(" map:","")
+            maps.set(mapName,[])
+            currentMap=mapName
         }else{
             let mappings=maps.get(currentMap)
             mappings.push(line.split(" ").map(number=>parseInt(number)))
             maps.set(currentMap,mappings)
         }
     })
-
-    let previousValues=[...seeds]
-    let nextValues=[]
-    console.log(maps)
-    maps.forEach((mappings,key)=>
-    {
-        previousValues.forEach(value=>{
-            let newValue=value
-            console.log("checking "+ value + " against " + mappings)
-
-            mappings.forEach(mapping => {
-                if(value>=mapping[1]&&value<mapping[1]+mapping[2]){
-                    console.log("matched "+ value + " against " + mapping)
-                    newValue= mapping[0] + value - mapping[1]
-                    console.log("result "+ newValue)
-                }
-            });
-
-            nextValues.push(newValue);
-        })
-        console.log(nextValues)
-
-        previousValues=[...nextValues];
-        nextValues=[]
-    })
-    let lowestDestination=Infinity
-    previousValues.forEach(value=>{if(value<lowestDestination){
-        lowestDestination=value
-    }})
-    console.log(lowestDestination)
-})
+    return maps;
+}
