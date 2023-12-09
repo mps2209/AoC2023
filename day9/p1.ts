@@ -17,16 +17,8 @@ fs.readFile(filePath, 'utf8', (err, data) => {
     let result = sequences.map(sequence=>getLastSequence(sequence)).reduce((a,b)=>a+b)
     console.log(result)
 })
-
 function getLastSequence(sequence:number[]){
-    if (!allZeros(sequence)){
-        let nextSequence=calculateNextSequence(sequence);
-        return sequence[sequence.length-1] + getLastSequence(nextSequence) 
-    }
-    return 0   
-}
-function allZeros(sequence:number[]){
-    return sequence.every(n=>n==0)
+    return sequence.every(n=>n==0)? 0 : sequence[0] - getLastSequence(calculateNextSequence(sequence)) 
 }
 function calculateNextSequence(sequence:number[]){
     let nextSequence=sequence.map((n,index,array)=>{
