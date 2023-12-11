@@ -1,0 +1,5 @@
+read in input
+expand galaxy
+each line that has no star duplicate that line
+pair all stars with each other
+find closest path between each path
