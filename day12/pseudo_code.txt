@@ -1,0 +1,18 @@
+read in input
+seperate empty lines
+
+find mirror lines.
+go through each line,
+horizontally:
+i=0=>field .length(){
+    seperate into two field
+    part1:(0-i)
+    part2:(i+1-field.length)
+    part1.reverse()
+    take the smaller part()
+    part.map(element,index=>element==part2[index])
+}
+vertically:
+transform to horizontal?
+horizontal_text= Arraz(lines[0.length])
+lines.foreach(line=>line.forach(c,index=>horizontal_text[index].push(c)))

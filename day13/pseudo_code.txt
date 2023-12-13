@@ -1,0 +1,16 @@
+read in input
+separate springs from configuration of damaged springs
+Ways to solve:
+try out all combinations, check possible ones, add to set, count.
+Figure out a way to immediately check possible combinations
+
+example:
+.??..??...?##. 1,1,3
+Regex:
+1: /[.?]?[\#?][.?]+/g
+todo find matches for largest number=>{
+    match substring of first index with second largest number
+        until no more matches
+    repeat.
+    Count succesfull loops
+}
