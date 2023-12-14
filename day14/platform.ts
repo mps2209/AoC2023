@@ -1,18 +1,39 @@
 export class Platform {
   configuration: string[];
-  weight: number;
+  weight = 0;
   constructor(platformConfiguration: string[]) {
     this.configuration = platformConfiguration;
-    this.weight = this.calculateWeight();
+    this.calculateWeight();
   }
-  private calculateWeight() {
+  calculateWeight() {
     let weight = this.configuration
       .map(
         (line, index, configuration) =>
           (this.configuration.length - index) * getNumberOfRocks(line)
       )
       .reduce((p, n) => p + n);
-    return weight;
+    this.weight = weight;
+  }
+  cyclePlatform(cycles: number) {
+    while (cycles > 0) {
+      cycles--;
+      for (let index = 0; index < 4; index++) {
+        this.tiltPlatform();
+        this.rotatePlatform();
+      }
+      this.calculateWeight();
+    }
+  }
+  rotatePlatform() {
+    let rawField = [...Array(this.configuration[0].length)].map((i) => [""]);
+    let linesarray = this.configuration.map((line) => line.split(""));
+    linesarray.forEach((line) => {
+      line.forEach((c, index, line) => {
+        rawField[index] = [c].concat(rawField[index]);
+      });
+    });
+    let rotatedField: string[] = rawField.map((line) => line.join(""));
+    this.configuration = rotatedField;
   }
   tiltPlatform() {
     let shifted = true;
@@ -30,7 +51,18 @@ export class Platform {
       });
       this.configuration = shiftedConfiguration;
     }
-    this.weight = this.calculateWeight();
+  }
+  findStableWeight() {
+    let weights: number[] = [];
+    let cycles = 0;
+    while (!weights.includes(this.weight)) {
+      cycles++;
+      weights.push(this.weight);
+
+      this.cyclePlatform(cycles);
+      this.calculateWeight();
+    }
+    return weights;
   }
 }
 

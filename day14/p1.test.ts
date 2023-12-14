@@ -1,11 +1,15 @@
 // calculator.test.ts
 import { Platform, PlatformFactory, rollRocks } from "./platform";
-import { readInput } from "./main";
+import { readInput } from "./aoc";
 import {
+  cycledPlatformOne,
+  cycledPlatformTwo,
+  cycledPlatformThree,
   inputString,
   tiltedPlatform,
   tiltedinputString,
   untiltedPlatform,
+  counterClockwisePlatform,
 } from "./test_data";
 
 test("readInput", async () => {
@@ -43,5 +47,31 @@ test("rollRocks", () => {
 test("tiltedPlatformWeight", () => {
   const platform: Platform = new Platform(untiltedPlatform);
   platform.tiltPlatform();
+  platform.calculateWeight();
   expect(platform.weight).toBe(136);
+});
+test("rotatePlatform", () => {
+  const platform: Platform = new Platform(untiltedPlatform);
+  platform.rotatePlatform();
+  expect(platform.configuration).toStrictEqual(counterClockwisePlatform);
+});
+
+test("cyclePlatform", () => {
+  const platform: Platform = new Platform(untiltedPlatform);
+  platform.cyclePlatform(1);
+  expect(platform.configuration).toStrictEqual(cycledPlatformOne);
+});
+test("cyclePlatformTwo", () => {
+  const platform: Platform = new Platform(untiltedPlatform);
+  platform.cyclePlatform(2);
+  expect(platform.configuration).toStrictEqual(cycledPlatformTwo);
+});
+test("cyclePlatformThree", () => {
+  const platform: Platform = new Platform(untiltedPlatform);
+  platform.cyclePlatform(3);
+  expect(platform.configuration).toStrictEqual(cycledPlatformThree);
+});
+test("cyclePlatformThree", () => {
+  const platform: Platform = new Platform(untiltedPlatform);
+  expect(platform.findStableWeight().pop()).toBe(64);
 });
