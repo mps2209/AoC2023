@@ -1,5 +1,5 @@
 // calculator.test.ts
-import { readInput } from "./main";
+import { readInput } from "./aoc";
 
 const inputText = `test_input_test`;
 

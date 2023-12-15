@@ -1,4 +1,4 @@
 import { solveAoC } from "./aoc";
 import * as fs from "fs";
 
-solveAoC("test_input.txt");
+solveAoC("input.txt").then((result) => console.log(result));

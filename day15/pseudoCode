@@ -1,0 +1,3 @@
+TO solve AoC day 15 I read the input data and calculate the result
+TO read the input data and calculate the result I have to first split the comma seperated list, calculate each string and add them together
+TO calculate each string I have to get the first characters hash value, multiply it with 17 and get the modulo of 256
